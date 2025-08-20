@@ -4,6 +4,7 @@ import jakarta.persistence.*;
 import org.locationtech.jts.geom.Point;
 
 import java.time.LocalDate;
+import java.util.Objects;
 
 @Entity
 @Table(name = "packages")
@@ -85,4 +86,21 @@ public class Package extends BaseEntity {
     public void setDeliveryDate(LocalDate deliveryDate) {
         this.deliveryDate = deliveryDate;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Package)) return false;
+        if (!super.equals(o)) return false;
+        Package aPackage = (Package) o;
+        return Objects.equals(depot, aPackage.depot) &&
+                Objects.equals(name, aPackage.name) &&
+                Objects.equals(location, aPackage.location);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), depot, name, location);
+    }
+
 }

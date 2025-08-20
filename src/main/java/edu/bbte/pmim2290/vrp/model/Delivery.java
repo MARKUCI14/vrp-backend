@@ -2,6 +2,8 @@ package edu.bbte.pmim2290.vrp.model;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "delivery", uniqueConstraints = { @UniqueConstraint(columnNames = {"listing_id", "package_id"}) })
 public class Delivery extends BaseEntity {
@@ -52,4 +54,20 @@ public class Delivery extends BaseEntity {
     public void setDeliveryOrder(Integer deliveryOrder) {
         this.deliveryOrder = deliveryOrder;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Delivery)) return false;
+        if (!super.equals(o)) return false;
+        Delivery delivery = (Delivery) o;
+        return Objects.equals(listing, delivery.listing) &&
+                Objects.equals(pkg, delivery.pkg);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), listing, pkg);
+    }
+
 }

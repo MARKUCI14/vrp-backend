@@ -2,6 +2,7 @@ package edu.bbte.pmim2290.vrp.model;
 
 import jakarta.persistence.*;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -69,4 +70,19 @@ public class User extends BaseEntity {
     public Set<Depot> getDepots() {
         return depots;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof User)) return false;
+        if (!super.equals(o)) return false;
+        User user = (User) o;
+        return Objects.equals(email, user.email);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), email);
+    }
+
 }

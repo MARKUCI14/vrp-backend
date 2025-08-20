@@ -2,6 +2,8 @@ package edu.bbte.pmim2290.vrp.model;
 
 import jakarta.persistence.*;
 
+import java.util.Objects;
+
 @Entity
 @Table(name = "cars")
 public class Car extends BaseEntity {
@@ -72,4 +74,19 @@ public class Car extends BaseEntity {
     public void setMaxWeight(Double maxWeight) {
         this.maxWeight = maxWeight;
     }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Car)) return false;
+        if (!super.equals(o)) return false;
+        Car car = (Car) o;
+        return Objects.equals(vin, car.vin);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), vin);
+    }
+
 }

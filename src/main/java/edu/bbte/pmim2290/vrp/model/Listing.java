@@ -3,6 +3,7 @@ package edu.bbte.pmim2290.vrp.model;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
@@ -19,5 +20,18 @@ public class Listing extends BaseEntity {
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true)
     private final Set<Delivery> deliveries = new HashSet<>();
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Listing)) return false;
+        if (!super.equals(o)) return false;
+        Listing listing = (Listing) o;
+        return Objects.equals(depot, listing.depot) &&
+                Objects.equals(date, listing.date);
+    }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(super.hashCode(), depot, date);
+    }
 }
