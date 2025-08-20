@@ -77,9 +77,15 @@ public class Car extends BaseEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Car)) return false;
-        if (!super.equals(o)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Car)) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
         Car car = (Car) o;
         return Objects.equals(vin, car.vin);
     }

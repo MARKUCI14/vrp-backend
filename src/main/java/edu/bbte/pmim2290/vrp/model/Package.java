@@ -89,13 +89,19 @@ public class Package extends BaseEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Package)) return false;
-        if (!super.equals(o)) return false;
-        Package aPackage = (Package) o;
-        return Objects.equals(depot, aPackage.depot) &&
-                Objects.equals(name, aPackage.name) &&
-                Objects.equals(location, aPackage.location);
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Package)) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
+        Package p = (Package) o;
+        return Objects.equals(depot, p.depot)
+                && Objects.equals(name, p.name)
+                && Objects.equals(location, p.location);
     }
 
     @Override

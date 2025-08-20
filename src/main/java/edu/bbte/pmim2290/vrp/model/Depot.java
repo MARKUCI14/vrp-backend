@@ -2,6 +2,7 @@ package edu.bbte.pmim2290.vrp.model;
 
 import jakarta.persistence.*;
 import org.locationtech.jts.geom.Point;
+
 import java.util.HashSet;
 import java.util.Objects;
 import java.util.Set;
@@ -77,12 +78,18 @@ public class Depot extends BaseEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Depot)) return false;
-        if (!super.equals(o)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Depot)) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
         Depot depot = (Depot) o;
-        return Objects.equals(name, depot.name) &&
-                Objects.equals(location, depot.location);
+        return Objects.equals(name, depot.name)
+                && Objects.equals(location, depot.location);
     }
 
     @Override

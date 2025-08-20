@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.util.Objects;
 
 @Entity
-@Table(name = "delivery", uniqueConstraints = { @UniqueConstraint(columnNames = {"listing_id", "package_id"}) })
+@Table(name = "delivery", uniqueConstraints = {@UniqueConstraint(columnNames = {"listing_id", "package_id"})})
 public class Delivery extends BaseEntity {
 
     @ManyToOne
@@ -57,12 +57,18 @@ public class Delivery extends BaseEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof Delivery)) return false;
-        if (!super.equals(o)) return false;
+        if (this == o) {
+            return true;
+        }
+        if (!(o instanceof Delivery)) {
+            return false;
+        }
+        if (!super.equals(o)) {
+            return false;
+        }
         Delivery delivery = (Delivery) o;
-        return Objects.equals(listing, delivery.listing) &&
-                Objects.equals(pkg, delivery.pkg);
+        return Objects.equals(listing, delivery.listing)
+                && Objects.equals(pkg, delivery.pkg);
     }
 
     @Override
