@@ -21,6 +21,26 @@ public class Listing extends BaseEntity {
     @OneToMany(mappedBy = "listing", cascade = CascadeType.ALL, orphanRemoval = true)
     private final Set<Delivery> deliveries = new HashSet<>();
 
+    public Depot getDepot() {
+        return depot;
+    }
+
+    public void setDepot(Depot depot) {
+        this.depot = depot;
+    }
+
+    public LocalDate getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDate date) {
+        this.date = date;
+    }
+
+    public Set<Delivery> getDeliveries() {
+        return deliveries;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
