@@ -1,15 +1,15 @@
 package edu.bbte.pmim2290.vrp.dto;
 
-import java.time.LocalDateTime;
+import java.time.LocalDate;
 
 public class OutListingDTO {
     private Long id;
 
     private Long depotId;
 
-    private Long depotName;
+    private String depotName;
 
-    private LocalDateTime time;
+    private LocalDate date;
 
     public Long getId() {
         return id;
@@ -27,19 +27,19 @@ public class OutListingDTO {
         this.depotId = depotId;
     }
 
-    public Long getDepotName() {
+    public String getDepotName() {
         return depotName;
     }
 
-    public void setDepotName(Long depotName) {
+    public void setDepotName(String depotName) {
         this.depotName = depotName;
     }
 
-    public LocalDateTime getTime() {
-        return time;
+    public LocalDate getDate() {
+        return date;
     }
 
-    public void setTime(LocalDateTime time) {
-        this.time = time;
+    public void setDate(LocalDate date) {
+        this.date = date;
     }
 }

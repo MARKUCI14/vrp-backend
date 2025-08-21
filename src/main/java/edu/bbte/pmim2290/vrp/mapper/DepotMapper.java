@@ -10,8 +10,14 @@ import org.mapstruct.Mapping;
 public interface DepotMapper {
     @Mapping(source = "user.id", target = "userId")
     @Mapping(source = "user.username", target = "username")
+    @Mapping(source = "location.y", target = "latitude") // JTS Point y = latitude
+    @Mapping(source = "location.x", target = "longitude") // JTS Point x = longitude
     OutDepotDTO toOutDepotDTO(Depot depot);
 
     @Mapping(target = "id", ignore = true)
+    @Mapping(target = "location",
+            expression = "java(new org.locationtech.jts.geom"
+                    + ".GeometryFactory().createPoint(new org.locationtech.jts.geom"
+                    + ".Coordinate(inDepotDTO.getLongitude(), inDepotDTO.getLatitude())))")
     Depot toDepot(InDepotDTO inDepotDTO);
 }

@@ -9,7 +9,7 @@ public class OutPackageDTO {
 
     private Long depotId;
 
-    private Long depotName;
+    private String depotName;
 
     private String address;
 
@@ -39,11 +39,11 @@ public class OutPackageDTO {
         this.depotId = depotId;
     }
 
-    public Long getDepotName() {
+    public String getDepotName() {
         return depotName;
     }
 
-    public void setDepotName(Long depotName) {
+    public void setDepotName(String depotName) {
         this.depotName = depotName;
     }
 

@@ -33,6 +33,7 @@ public class InPackageDTO {
     private LocalDate date;
 
     public Depot getDepot() {
+
         return depot;
     }
 

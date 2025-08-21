@@ -11,7 +11,7 @@ import java.util.Objects;
 public class Package extends BaseEntity {
 
     @ManyToOne
-    @JoinColumn(name = "depo_id")
+    @JoinColumn(name = "depot_id")
     private Depot depot;
 
     private String address;

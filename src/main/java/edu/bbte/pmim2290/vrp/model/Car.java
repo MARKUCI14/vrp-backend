@@ -9,7 +9,7 @@ import java.util.Objects;
 public class Car extends BaseEntity {
 
     @ManyToOne
-    @JoinColumn(name = "depo_id")
+    @JoinColumn(name = "depot_id")
     private Depot depot;
 
     private String vin;

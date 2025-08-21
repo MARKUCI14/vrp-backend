@@ -19,7 +19,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/deliverys")
+@RequestMapping("/api/deliveries")
 public class DeliveryController {
     @Autowired
     private final DeliveryService deliveryService;

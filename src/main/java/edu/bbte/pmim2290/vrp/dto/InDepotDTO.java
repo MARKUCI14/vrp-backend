@@ -3,7 +3,6 @@ package edu.bbte.pmim2290.vrp.dto;
 import edu.bbte.pmim2290.vrp.model.User;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Size;
-import org.locationtech.jts.geom.Point;
 
 public class InDepotDTO {
     private User user;
@@ -16,7 +15,9 @@ public class InDepotDTO {
     @Size(min = 1, max = 255)
     private String address;
 
-    private Point location;
+    private Double latitude;
+
+    private Double longitude;
 
     public User getUser() {
         return user;
@@ -42,11 +43,19 @@ public class InDepotDTO {
         this.address = address;
     }
 
-    public Point getLocation() {
-        return location;
+    public Double getLatitude() {
+        return latitude;
     }
 
-    public void setLocation(Point location) {
-        this.location = location;
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 }

@@ -1,7 +1,5 @@
 package edu.bbte.pmim2290.vrp.dto;
 
-import org.locationtech.jts.geom.Point;
-
 public class OutDepotDTO {
     private Long id;
 
@@ -13,7 +11,9 @@ public class OutDepotDTO {
 
     private String address;
 
-    private Point location;
+    private Double latitude;
+
+    private Double longitude;
 
     public Long getId() {
         return id;
@@ -55,11 +55,19 @@ public class OutDepotDTO {
         this.address = address;
     }
 
-    public Point getLocation() {
-        return location;
+    public Double getLongitude() {
+        return longitude;
     }
 
-    public void setLocation(Point location) {
-        this.location = location;
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
     }
 }
