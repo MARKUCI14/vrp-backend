@@ -43,4 +43,9 @@ public class CarServiceImplements implements CarService {
     public List<Car> getAllCars() throws DatabaseException {
         return carDAO.findAll();
     }
+
+    @Override
+    public List<Car> findByDepotId(Long depotId) throws DatabaseException {
+        return carDAO.findByDepotId(depotId);
+    }
 }

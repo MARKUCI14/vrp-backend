@@ -5,6 +5,7 @@ import edu.bbte.pmim2290.vrp.dto.OutCarDTO;
 import edu.bbte.pmim2290.vrp.model.Car;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface CarMapper {
@@ -14,4 +15,8 @@ public interface CarMapper {
 
     @Mapping(target = "id", ignore = true)
     Car toCar(InCarDTO inCarDTO);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "depot", ignore = true)
+    void updateFromDTO(InCarDTO inCarDTO, @MappingTarget Car car);
 }

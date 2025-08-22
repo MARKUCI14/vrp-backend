@@ -17,4 +17,6 @@ public interface CarService {
     void deleteCar(Long id) throws EntityNotFoundException, DatabaseException;
 
     List<Car> getAllCars() throws DatabaseException;
+
+    List<Car> findByDepotId(Long depotId) throws DatabaseException;
 }

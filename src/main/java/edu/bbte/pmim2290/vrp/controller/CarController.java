@@ -36,8 +36,6 @@ public class CarController {
             throws DatabaseException {
         List<Car> cars;
         cars = carService.getAllCars();
-
-
         return cars.stream()
                 .map(carMapper::toOutCarDTO)
                 .collect(Collectors.toList());
