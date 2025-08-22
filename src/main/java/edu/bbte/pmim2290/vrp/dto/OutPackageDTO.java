@@ -1,7 +1,5 @@
 package edu.bbte.pmim2290.vrp.dto;
 
-import org.locationtech.jts.geom.Point;
-
 import java.time.LocalDate;
 
 public class OutPackageDTO {
@@ -13,7 +11,9 @@ public class OutPackageDTO {
 
     private String address;
 
-    private Point location;
+    private Double latitude;
+
+    private Double longitude;
 
     private Double weight;
 
@@ -55,12 +55,20 @@ public class OutPackageDTO {
         this.address = address;
     }
 
-    public Point getLocation() {
-        return location;
+    public Double getLatitude() {
+        return latitude;
     }
 
-    public void setLocation(Point location) {
-        this.location = location;
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 
     public Double getWeight() {

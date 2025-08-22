@@ -17,4 +17,6 @@ public interface PackageService {
     void deletePackage(Long id) throws EntityNotFoundException, DatabaseException;
 
     List<Package> getAllPackages() throws DatabaseException;
+
+    List<Package> findByDepotId(Long depotId) throws DatabaseException;
 }

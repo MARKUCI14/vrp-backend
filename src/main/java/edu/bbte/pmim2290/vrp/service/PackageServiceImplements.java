@@ -43,4 +43,9 @@ public class PackageServiceImplements implements PackageService {
     public List<Package> getAllPackages() throws DatabaseException {
         return packageDAO.findAll();
     }
+
+    @Override
+    public List<Package> findByDepotId(Long depotId) throws DatabaseException {
+        return packageDAO.findByDepotId(depotId);
+    }
 }
