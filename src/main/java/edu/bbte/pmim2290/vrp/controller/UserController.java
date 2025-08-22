@@ -50,17 +50,4 @@ public class UserController {
         return userMapper.toOutUserDTO(user.get());
     }
 
-    @PutMapping("/{id}")
-    @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity<OutUserDTO> updateUser(@PathVariable Long id, @Valid @RequestBody InUserDTO inUser)
-            throws EntityNotFoundException, DatabaseException {
-        User authUser = getCurrentUser();
-
-        if (!authUser.getId().equals(id)) {
-            throw new SecurityException("Access denied");
-        }
-        User user = userMapper.toUser(inUser);
-        user.setId(id);
-        return ResponseEntity.ok(userMapper.toOutUserDTO(userService.updateUser(user)));
-    }
 }
