@@ -1,19 +1,15 @@
 package edu.bbte.pmim2290.vrp.controller;
 
 import edu.bbte.pmim2290.vrp.config.UserDetailsImpl;
-import edu.bbte.pmim2290.vrp.dto.InUserDTO;
 import edu.bbte.pmim2290.vrp.dto.OutUserDTO;
 import edu.bbte.pmim2290.vrp.exception.DatabaseException;
 import edu.bbte.pmim2290.vrp.exception.EntityNotFoundException;
 import edu.bbte.pmim2290.vrp.mapper.UserMapper;
 import edu.bbte.pmim2290.vrp.model.User;
 import edu.bbte.pmim2290.vrp.service.UserService;
-import jakarta.validation.Valid;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
