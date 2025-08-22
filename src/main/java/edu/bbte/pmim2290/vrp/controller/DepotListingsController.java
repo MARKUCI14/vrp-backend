@@ -1,17 +1,19 @@
 package edu.bbte.pmim2290.vrp.controller;
 
 import edu.bbte.pmim2290.vrp.config.UserDetailsImpl;
-import edu.bbte.pmim2290.vrp.dto.InPackageDTO;
-import edu.bbte.pmim2290.vrp.dto.OutPackageDTO;
+import edu.bbte.pmim2290.vrp.dto.InListingDTO;
+import edu.bbte.pmim2290.vrp.dto.OutListingDTO;
 import edu.bbte.pmim2290.vrp.exception.DatabaseException;
 import edu.bbte.pmim2290.vrp.exception.EntityNotFoundException;
-import edu.bbte.pmim2290.vrp.mapper.PackageMapper;
-import edu.bbte.pmim2290.vrp.model.Package;
+import edu.bbte.pmim2290.vrp.mapper.ListingMapper;
+import edu.bbte.pmim2290.vrp.model.Listing;
 import edu.bbte.pmim2290.vrp.model.Depot;
 import edu.bbte.pmim2290.vrp.model.User;
-import edu.bbte.pmim2290.vrp.service.PackageService;
+import edu.bbte.pmim2290.vrp.service.ListingService;
 import edu.bbte.pmim2290.vrp.service.DepotService;
 import jakarta.validation.Valid;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -24,17 +26,18 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("/api/depots/{depotId}/packages")
-public class DepotPackagesController {
+@RequestMapping("/api/depots/{depotId}/listings")
+public class DepotListingsController {
     private final DepotService depotService;
-    private final PackageService packageService;
+    private final ListingService listingService;
+    private static final Logger logger = LoggerFactory.getLogger(DepotListingsController.class);
 
     @Autowired
-    private PackageMapper packageMapper;
+    private ListingMapper listingMapper;
 
-    public DepotPackagesController(DepotService depotService, PackageService packageService) {
+    public DepotListingsController(DepotService depotService, ListingService listingService) {
         this.depotService = depotService;
-        this.packageService = packageService;
+        this.listingService = listingService;
     }
 
     public User getCurrentUser() {
@@ -47,45 +50,48 @@ public class DepotPackagesController {
         Depot depot = depotService.getDepotById(depotId)
                 .orElseThrow(() -> new EntityNotFoundException("Depot not found"));
         User user = getCurrentUser();
-
+        logger.info("Validating depot {}", depot.getId());
+        logger.info("Validating depot userId {}", depot.getUser().getId());
+        logger.info("Validating user {}", user.getId());
         return depot.getUser().getId().equals(user.getId());
     }
 
     @GetMapping
-    public List<OutPackageDTO> getDepotsPackages(@PathVariable Long depotId)
+    public List<OutListingDTO> getDepotsListings(@PathVariable Long depotId)
             throws DatabaseException, EntityNotFoundException {
         if (!validateDepotId(depotId)) {
             throw new SecurityException("Access denied");
         }
 
-        List<Package> packages;
-        packages = packageService.findByDepotId(depotId);
+        List<Listing> listings;
+        listings = listingService.findByDepotId(depotId);
 
-        return packages.stream()
-                .map(packageMapper::toOutPackageDTO)
+        return listings.stream()
+                .map(listingMapper::toOutListingDTO)
                 .collect(Collectors.toList());
     }
 
     @GetMapping("/{id}")
-    public OutPackageDTO getDepotsPackage(@PathVariable Long depotId, @PathVariable Long id)
+    public OutListingDTO getDepotsListing(@PathVariable Long depotId, @PathVariable Long id)
             throws DatabaseException, EntityNotFoundException {
+
         if (!validateDepotId(depotId)) {
             throw new SecurityException("Access denied");
         }
 
-        Package pkg = packageService.getPackageById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Package not found"));
+        Listing listing = listingService.getListingById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Listing not found"));
 
-        if (!pkg.getDepot().getId().equals(depotId)) {
+        if (!listing.getDepot().getId().equals(depotId)) {
             throw new SecurityException("Access denied: Listing does not belong to this depot");
         }
 
-        return packageMapper.toOutPackageDTO(pkg);
+        return listingMapper.toOutListingDTO(listing);
     }
 
     @PostMapping
-    public ResponseEntity<OutPackageDTO> addPackageToDepot(@PathVariable Long depotId,
-                                                           @Valid @RequestBody InPackageDTO inPackageDTO)
+    public ResponseEntity<OutListingDTO> addListingToDepot(@PathVariable Long depotId,
+                                                           @Valid @RequestBody InListingDTO inListingDTO)
             throws DatabaseException, EntityNotFoundException {
         if (!validateDepotId(depotId)) {
             throw new SecurityException("Access denied");
@@ -94,18 +100,18 @@ public class DepotPackagesController {
         Depot depot = depotService.getDepotById(depotId)
                 .orElseThrow(() -> new EntityNotFoundException("Depot not found"));
 
-        Package pkg = packageMapper.toPackage(inPackageDTO);
-        pkg.setDepot(depot);
+        Listing listing = listingMapper.toListing(inListingDTO);
+        listing.setDepot(depot);
 
-        Package savedPackage = packageService.createPackage(pkg);
-        URI uri = URI.create("/api/depots/" + depotId + "/packages/" + savedPackage.getId());
-        return ResponseEntity.created(uri).body(packageMapper.toOutPackageDTO(savedPackage));
+        Listing savedListing = listingService.createListing(listing);
+        URI uri = URI.create("/api/depots/" + depotId + "/listings/" + savedListing.getId());
+        return ResponseEntity.created(uri).body(listingMapper.toOutListingDTO(savedListing));
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<OutPackageDTO> updateDepotsPackage(@PathVariable Long depotId,
-                                                             @PathVariable Long id,
-                                                             @Valid @RequestBody InPackageDTO inPackageDTO)
+    public ResponseEntity<OutListingDTO> updateDepotsListing(@PathVariable Long depotId,
+                                                     @PathVariable Long id,
+                                                             @Valid @RequestBody InListingDTO inListingDTO)
             throws DatabaseException, EntityNotFoundException {
         if (!validateDepotId(depotId)) {
             throw new SecurityException("Access denied");
@@ -113,18 +119,18 @@ public class DepotPackagesController {
         Depot depot = depotService.getDepotById(depotId)
                 .orElseThrow(() -> new EntityNotFoundException("Depot not found"));
 
-        Package pkg = packageService.getPackageById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Package not found"));
+        Listing listing = listingService.getListingById(id)
+                .orElseThrow(() -> new EntityNotFoundException("Listing not found"));
 
-        packageMapper.updateFromDTO(inPackageDTO, pkg);
-        pkg.setDepot(depot);
+        listingMapper.updateFromDTO(inListingDTO, listing);
+        listing.setDepot(depot);
 
-        Package savedPackage = packageService.createPackage(pkg);
-        return ResponseEntity.ok(packageMapper.toOutPackageDTO(savedPackage));
+        Listing savedListing = listingService.createListing(listing);
+        return ResponseEntity.ok(listingMapper.toOutListingDTO(savedListing));
     }
 
     @DeleteMapping("/{id}")
-    public void deleteDepotsPackage(@PathVariable Long depotId, @PathVariable Long id)
+    public void deleteDepotsListing(@PathVariable Long depotId, @PathVariable Long id)
             throws EntityNotFoundException, DatabaseException {
         Optional<Depot> depotOptional = depotService.getDepotById(depotId);
         if (!depotOptional.isPresent()) {
@@ -135,15 +141,15 @@ public class DepotPackagesController {
             throw new SecurityException("Access denied");
         }
 
-        Optional<Package> pkg = packageService.getPackageById(id);
-        if (!pkg.isPresent()) {
-            throw new EntityNotFoundException("Package not found");
+        Optional<Listing> listing = listingService.getListingById(id);
+        if (!listing.isPresent()) {
+            throw new EntityNotFoundException("Listing not found");
         }
 
-        if (!pkg.get().getDepot().getId().equals(depotId)) {
-            throw new EntityNotFoundException("Package does not belong to depot");
+        if (!listing.get().getDepot().getId().equals(depotId)) {
+            throw new EntityNotFoundException("Listing does not belong to depot");
         }
 
-        packageService.deletePackage(id);
+        listingService.deleteListing(id);
     }
 }

@@ -75,6 +75,10 @@ public class DepotCarsController {
         Car car = carService.getCarById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Car not found"));
 
+        if (!car.getDepot().getId().equals(depotId)) {
+            throw new SecurityException("Access denied: Listing does not belong to this depot");
+        }
+
         return carMapper.toOutCarDTO(car);
     }
 
