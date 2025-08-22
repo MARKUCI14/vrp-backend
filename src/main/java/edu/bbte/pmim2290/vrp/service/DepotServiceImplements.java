@@ -43,4 +43,9 @@ public class DepotServiceImplements implements DepotService {
     public List<Depot> getAllDepots() throws DatabaseException {
         return depotDAO.findAll();
     }
+
+    @Override
+    public List<Depot> getDepotsForUser(Long id) throws DatabaseException {
+        return depotDAO.findByUserId(id);
+    }
 }
