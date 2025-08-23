@@ -24,6 +24,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/depots/{depotId}/packages")
 public class DepotPackagesController {
     private final DepotService depotService;

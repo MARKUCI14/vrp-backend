@@ -10,4 +10,8 @@ public interface AuthService {
     User registerUser(InUserDTO userDTO) throws EntityNotFoundException, DatabaseException;
 
     String login(String username, String password);
+
+    void logout(String username);
+
+    boolean validateSession(String username, String token);
 }

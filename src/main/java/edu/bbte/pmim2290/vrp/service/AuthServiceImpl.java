@@ -1,6 +1,7 @@
 package edu.bbte.pmim2290.vrp.service;
 
 import edu.bbte.pmim2290.vrp.config.JwtUtil;
+import edu.bbte.pmim2290.vrp.config.SessionManager;
 import edu.bbte.pmim2290.vrp.dao.UserDAO;
 import edu.bbte.pmim2290.vrp.dto.InUserDTO;
 import edu.bbte.pmim2290.vrp.exception.AuthenticationFailedException;
@@ -16,11 +17,14 @@ public class AuthServiceImpl implements AuthService {
     private final UserDAO userDAO;
     private final JwtUtil jwtUtil;
     private final BCryptPasswordEncoder passwordEncoder;
+    private final SessionManager sessionManager;
 
-    public AuthServiceImpl(final UserDAO userDAO, final JwtUtil jwtUtil) {
+    public AuthServiceImpl(final UserDAO userDAO,
+                           final JwtUtil jwtUtil, final SessionManager sessionManager) {
         this.userDAO = userDAO;
         this.jwtUtil = jwtUtil;
         this.passwordEncoder = new BCryptPasswordEncoder();
+        this.sessionManager = sessionManager;
     }
 
     @Override
@@ -48,6 +52,22 @@ public class AuthServiceImpl implements AuthService {
             throw new AuthenticationFailedException("Invalid username or password");
         }
 
-        return jwtUtil.generateToken(user.getUsername());
+        if (sessionManager.isLoggedIn(username)) {
+            throw new AuthenticationFailedException("User already logged in");
+        }
+
+        String token = jwtUtil.generateToken(user.getUsername());
+        sessionManager.registerSession(username, token); // <-- register the token
+        return token;
+    }
+
+    @Override
+    public void logout(String username) {
+        sessionManager.removeSession(username);
+    }
+
+    @Override
+    public boolean validateSession(String username, String token) {
+        return sessionManager.validateToken(username, token);
     }
 }

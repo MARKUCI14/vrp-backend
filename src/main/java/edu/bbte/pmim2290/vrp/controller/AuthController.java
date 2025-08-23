@@ -1,5 +1,6 @@
 package edu.bbte.pmim2290.vrp.controller;
 
+import edu.bbte.pmim2290.vrp.config.JwtUtil;
 import edu.bbte.pmim2290.vrp.dto.InUserDTO;
 import edu.bbte.pmim2290.vrp.exception.DatabaseException;
 import edu.bbte.pmim2290.vrp.exception.EntityNotFoundException;
@@ -10,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/auth")
 public class AuthController {
 
@@ -33,5 +35,20 @@ public class AuthController {
         return ResponseEntity.ok(token);
     }
 
-    // JWT-based logout can just be handled client-side by removing token
+    @PostMapping("/logout")
+    public ResponseEntity<String> logout(@RequestHeader("Authorization") String authHeader) {
+        if (authHeader == null || !authHeader.startsWith("Bearer ")) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid Authorization header");
+        }
+
+        JwtUtil jwtUtil = new JwtUtil();
+
+        String token = authHeader.substring(7);
+        String username = jwtUtil.extractUsername(token);
+        if (username == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Invalid token");
+        }
+        authService.logout(username);
+        return ResponseEntity.ok("Logged out successfully");
+    }
 }

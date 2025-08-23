@@ -18,12 +18,14 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final UserDetailsServiceImpl userDetailsService;
     private final JwtUtil jwtUtil;
+    private final SessionManager sessionManager;
 
     public JwtAuthenticationFilter(final UserDetailsServiceImpl userDetailsService,
-                                   final JwtUtil jwtUtil) {
+                                   final JwtUtil jwtUtil, SessionManager sessionManager) {
         super();
         this.userDetailsService = userDetailsService;
         this.jwtUtil = jwtUtil;
+        this.sessionManager = sessionManager;
     }
 
     @Override
@@ -48,7 +50,8 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
         final UserDetails userDetails = userDetailsService.loadUserByUsername(username);
 
-        if (jwtUtil.validateToken(token, userDetails.getUsername())) {
+        if (jwtUtil.validateToken(token, userDetails.getUsername())
+                && sessionManager.validateToken(userDetails.getUsername(), token)) {
             final UsernamePasswordAuthenticationToken authToken =
                     new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
             authToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
