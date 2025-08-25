@@ -13,12 +13,14 @@ import edu.bbte.pmim2290.vrp.service.PackageService;
 import edu.bbte.pmim2290.vrp.service.DepotService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
 import java.net.URI;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -53,14 +55,20 @@ public class DepotPackagesController {
     }
 
     @GetMapping
-    public List<OutPackageDTO> getDepotsPackages(@PathVariable Long depotId)
+    public List<OutPackageDTO> getDepotsPackages(@PathVariable Long depotId,
+                                                 @RequestParam(required = false) String queryDate)
             throws DatabaseException, EntityNotFoundException {
         if (!validateDepotId(depotId)) {
             throw new SecurityException("Access denied");
         }
 
         List<Package> packages;
-        packages = packageService.findByDepotId(depotId);
+        if (queryDate != null && !queryDate.isBlank()) {
+            LocalDate deliveryDate = LocalDate.parse(queryDate);
+            packages = packageService.findByDepotIdAndDeliveryDate(depotId, deliveryDate);
+        } else {
+            packages = packageService.findByDepotId(depotId);
+        }
 
         return packages.stream()
                 .map(packageMapper::toOutPackageDTO)
