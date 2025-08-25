@@ -30,7 +30,7 @@ public class InPackageDTO {
     private String phoneNumber;
 
     @NotNull(message = "Date is required")
-    private LocalDate date;
+    private LocalDate deliveryDate;
 
     public Depot getDepot() {
 
@@ -73,12 +73,12 @@ public class InPackageDTO {
         this.phoneNumber = phoneNumber;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDate getDeliveryDate() {
+        return deliveryDate;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setDeliveryDate(LocalDate deliveryDate) {
+        this.deliveryDate = deliveryDate;
     }
 
     public Double getLatitude() {
