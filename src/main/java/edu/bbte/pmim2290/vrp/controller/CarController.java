@@ -19,6 +19,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 @RestController
+@CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/cars")
 public class CarController {
     @Autowired
@@ -36,8 +37,6 @@ public class CarController {
             throws DatabaseException {
         List<Car> cars;
         cars = carService.getAllCars();
-
-
         return cars.stream()
                 .map(carMapper::toOutCarDTO)
                 .collect(Collectors.toList());

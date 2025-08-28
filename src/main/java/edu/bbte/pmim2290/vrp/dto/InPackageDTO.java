@@ -4,7 +4,6 @@ import edu.bbte.pmim2290.vrp.model.Depot;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
-import org.locationtech.jts.geom.Point;
 
 import java.time.LocalDate;
 
@@ -15,8 +14,9 @@ public class InPackageDTO {
     @Size(min = 1, max = 255)
     private String address;
 
-    @NotNull(message = "Location is required")
-    private Point location;
+    private Double latitude;
+
+    private Double longitude;
 
     @NotNull(message = "Weight is required")
     private Double weight;
@@ -30,7 +30,7 @@ public class InPackageDTO {
     private String phoneNumber;
 
     @NotNull(message = "Date is required")
-    private LocalDate date;
+    private LocalDate deliveryDate;
 
     public Depot getDepot() {
 
@@ -47,14 +47,6 @@ public class InPackageDTO {
 
     public void setAddress(String address) {
         this.address = address;
-    }
-
-    public Point getLocation() {
-        return location;
-    }
-
-    public void setLocation(Point location) {
-        this.location = location;
     }
 
     public Double getWeight() {
@@ -81,11 +73,27 @@ public class InPackageDTO {
         this.phoneNumber = phoneNumber;
     }
 
-    public LocalDate getDate() {
-        return date;
+    public LocalDate getDeliveryDate() {
+        return deliveryDate;
     }
 
-    public void setDate(LocalDate date) {
-        this.date = date;
+    public void setDeliveryDate(LocalDate deliveryDate) {
+        this.deliveryDate = deliveryDate;
+    }
+
+    public Double getLatitude() {
+        return latitude;
+    }
+
+    public void setLatitude(Double latitude) {
+        this.latitude = latitude;
+    }
+
+    public Double getLongitude() {
+        return longitude;
+    }
+
+    public void setLongitude(Double longitude) {
+        this.longitude = longitude;
     }
 }

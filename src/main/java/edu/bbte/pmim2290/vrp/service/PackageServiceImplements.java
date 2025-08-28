@@ -7,6 +7,7 @@ import edu.bbte.pmim2290.vrp.model.Package;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,5 +43,15 @@ public class PackageServiceImplements implements PackageService {
     @Override
     public List<Package> getAllPackages() throws DatabaseException {
         return packageDAO.findAll();
+    }
+
+    @Override
+    public List<Package> findByDepotId(Long depotId) throws DatabaseException {
+        return packageDAO.findByDepotId(depotId);
+    }
+
+    @Override
+    public List<Package> findByDepotIdAndDeliveryDate(Long depotId, LocalDate deliveryDate) throws DatabaseException {
+        return packageDAO.findByDepotIdAndDeliveryDate(depotId, deliveryDate);
     }
 }

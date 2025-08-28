@@ -43,4 +43,14 @@ public class DeliveryServiceImplements implements DeliveryService {
     public List<Delivery> getAllDeliverys() throws DatabaseException {
         return deliveryDAO.findAll();
     }
+
+    @Override
+    public List<Delivery> findByListingId(Long listingId) throws DatabaseException {
+        return deliveryDAO.findByListingId(listingId);
+    }
+
+    @Override
+    public void deleteByListingId(Long listingId) throws EntityNotFoundException, DatabaseException {
+        deliveryDAO.deleteByListingId(listingId);
+    }
 }

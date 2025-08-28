@@ -5,6 +5,7 @@ import edu.bbte.pmim2290.vrp.dto.OutListingDTO;
 import edu.bbte.pmim2290.vrp.model.Listing;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
+import org.mapstruct.MappingTarget;
 
 @Mapper(componentModel = "spring")
 public interface ListingMapper {
@@ -14,4 +15,8 @@ public interface ListingMapper {
 
     @Mapping(target = "id", ignore = true)
     Listing toListing(InListingDTO inListingDTO);
+
+    @Mapping(target = "id", ignore = true)
+    @Mapping(target = "depot", ignore = true)
+    void updateFromDTO(InListingDTO inListingDTO, @MappingTarget Listing listing);
 }

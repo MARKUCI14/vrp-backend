@@ -43,4 +43,9 @@ public class ListingServiceImplements implements ListingService {
     public List<Listing> getAllListings() throws DatabaseException {
         return listingDAO.findAll();
     }
+
+    @Override
+    public List<Listing> findByDepotId(Long depotId) throws DatabaseException {
+        return listingDAO.findByDepotId(depotId);
+    }
 }

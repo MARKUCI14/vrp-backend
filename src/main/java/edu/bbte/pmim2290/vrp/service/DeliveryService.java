@@ -17,4 +17,8 @@ public interface DeliveryService {
     void deleteDelivery(Long id) throws EntityNotFoundException, DatabaseException;
 
     List<Delivery> getAllDeliverys() throws DatabaseException;
+
+    List<Delivery> findByListingId(Long listingId) throws DatabaseException;
+
+    void deleteByListingId(Long listingId) throws EntityNotFoundException, DatabaseException;
 }

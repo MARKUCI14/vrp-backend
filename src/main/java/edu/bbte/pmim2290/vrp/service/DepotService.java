@@ -17,4 +17,6 @@ public interface DepotService {
     void deleteDepot(Long id) throws EntityNotFoundException, DatabaseException;
 
     List<Depot> getAllDepots() throws DatabaseException;
+
+    List<Depot> getDepotsForUser(Long id) throws DatabaseException;
 }

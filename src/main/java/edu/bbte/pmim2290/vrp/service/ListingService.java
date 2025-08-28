@@ -17,4 +17,6 @@ public interface ListingService {
     void deleteListing(Long id) throws EntityNotFoundException, DatabaseException;
 
     List<Listing> getAllListings() throws DatabaseException;
+
+    List<Listing> findByDepotId(Long depotId) throws DatabaseException;
 }
