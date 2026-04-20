@@ -67,13 +67,15 @@ public class VRPSolverHelper {
             throws EntityNotFoundException, DatabaseException {
         for (Map.Entry<String, List<Long>> entry : bestRoute.entrySet()) {
             Long carId = parseLong(entry.getKey());
-            Car car = carService.getCarById(carId).get();
+            Car car = carService.getCarById(carId)
+                    .orElseThrow(() -> new EntityNotFoundException("Car not found with id: " + carId));
 
             int order = 0;
             for (Long packageId : entry.getValue()) {
                 Delivery delivery = new Delivery();
                 delivery.setListing(listing);
-                delivery.setPkg(packageService.getPackageById(packageId).get());
+                delivery.setPkg(packageService.getPackageById(packageId)
+                        .orElseThrow(() -> new EntityNotFoundException("Package not found with id: " + packageId)));
                 delivery.setCar(car);
                 delivery.setDeliveryOrder(order++);
                 deliveryService.createDelivery(delivery);

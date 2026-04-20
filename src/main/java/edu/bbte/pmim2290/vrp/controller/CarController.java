@@ -45,6 +45,9 @@ public class CarController {
     @GetMapping("/{id}")
     public OutCarDTO getCar(@PathVariable Long id) throws EntityNotFoundException, DatabaseException {
         Optional<Car> car = carService.getCarById(id);
+        if (car.isEmpty()) {
+            throw new EntityNotFoundException("The requested Car does not exist");
+        }
         return carMapper.toOutCarDTO(car.get());
     }
 

@@ -47,6 +47,9 @@ public class DeliveryController {
     @GetMapping("/{id}")
     public OutDeliveryDTO getDelivery(@PathVariable Long id) throws EntityNotFoundException, DatabaseException {
         Optional<Delivery> delivery = deliveryService.getDeliveryById(id);
+        if (delivery.isEmpty()) {
+            throw new EntityNotFoundException("The requested Delivery does not exist");
+        }
         return deliveryMapper.toOutDeliveryDTO(delivery.get());
     }
 

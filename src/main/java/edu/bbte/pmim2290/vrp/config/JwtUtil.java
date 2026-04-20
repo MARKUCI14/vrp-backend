@@ -10,7 +10,7 @@ import java.util.Date;
 @Component
 public class JwtUtil {
     private static final String JWT_SECRET = "HajraSportklubCsikszeredaMarkMarkMarkMarkMarkMark";
-    private static long expiration = 1000 * 60 * 60 * 10; // 10 hours
+    private static long expiration = 1000L * 60 * 60 * 10; // 10 hours
 
     public String generateToken(final String username) {
         return Jwts.builder()

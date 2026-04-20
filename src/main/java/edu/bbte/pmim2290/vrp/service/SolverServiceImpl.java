@@ -53,7 +53,8 @@ public class SolverServiceImpl implements SolverService {
             throw new SecurityException("Access denied");
         }
 
-        Depot depot = depotService.getDepotById(depotId).get();
+        Depot depot = depotService.getDepotById(depotId)
+                .orElseThrow(() -> new RuntimeException("Depot not found"));
         List<Car> cars = vrpSolverHelper.carService.findByDepotId(depotId);
         List<Package> packages = vrpSolverHelper.packageService
                 .findByDepotIdAndDeliveryDate(depotId, listing.getDate());
