@@ -27,6 +27,10 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/depots/{depotId}/cars")
 public class DepotCarsController {
+    private static final String DEPOT_NOT_FOUND = "Depot not found";
+    private static final String CAR_NOT_FOUND = "Car not found";
+    private static final String ACCESS_DENIED = "Access denied";
+
     private final DepotService depotService;
     private final CarService carService;
 
@@ -46,7 +50,7 @@ public class DepotCarsController {
 
     public boolean validateDepotId(@PathVariable Long depotId) throws EntityNotFoundException, DatabaseException {
         Depot depot = depotService.getDepotById(depotId)
-                .orElseThrow(() -> new EntityNotFoundException("Depot not found"));
+                .orElseThrow(() -> new EntityNotFoundException(DEPOT_NOT_FOUND));
         User user = getCurrentUser();
 
         return depot.getUser().getId().equals(user.getId());
@@ -55,7 +59,7 @@ public class DepotCarsController {
     @GetMapping
     public List<OutCarDTO> getDepotsCars(@PathVariable Long depotId) throws DatabaseException, EntityNotFoundException {
         if (!validateDepotId(depotId)) {
-            throw new SecurityException("Access denied");
+            throw new SecurityException(ACCESS_DENIED);
         }
 
         List<Car> cars;
@@ -70,14 +74,14 @@ public class DepotCarsController {
     public OutCarDTO getDepotsCar(@PathVariable Long depotId, @PathVariable Long id)
             throws DatabaseException, EntityNotFoundException {
         if (!validateDepotId(depotId)) {
-            throw new SecurityException("Access denied");
+            throw new SecurityException(ACCESS_DENIED);
         }
 
         Car car = carService.getCarById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Car not found"));
+                .orElseThrow(() -> new EntityNotFoundException(CAR_NOT_FOUND));
 
         if (!car.getDepot().getId().equals(depotId)) {
-            throw new SecurityException("Access denied: Listing does not belong to this depot");
+            throw new SecurityException(ACCESS_DENIED);
         }
 
         return carMapper.toOutCarDTO(car);
@@ -87,11 +91,11 @@ public class DepotCarsController {
     public ResponseEntity<OutCarDTO> addCarToDepot(@PathVariable Long depotId, @Valid @RequestBody InCarDTO inCarDTO)
             throws DatabaseException, EntityNotFoundException {
         if (!validateDepotId(depotId)) {
-            throw new SecurityException("Access denied");
+            throw new SecurityException(ACCESS_DENIED);
         }
 
         Depot depot = depotService.getDepotById(depotId)
-                .orElseThrow(() -> new EntityNotFoundException("Depot not found"));
+                .orElseThrow(() -> new EntityNotFoundException(DEPOT_NOT_FOUND));
 
         Car car = carMapper.toCar(inCarDTO);
         car.setDepot(depot);
@@ -103,16 +107,16 @@ public class DepotCarsController {
 
     @PutMapping("/{id}")
     public ResponseEntity<OutCarDTO> updateDepotsCar(@PathVariable Long depotId,
-                                                     @PathVariable Long id, @Valid @RequestBody InCarDTO inCarDTO)
+            @PathVariable Long id, @Valid @RequestBody InCarDTO inCarDTO)
             throws DatabaseException, EntityNotFoundException {
         if (!validateDepotId(depotId)) {
-            throw new SecurityException("Access denied");
+            throw new SecurityException(ACCESS_DENIED);
         }
         Depot depot = depotService.getDepotById(depotId)
-                .orElseThrow(() -> new EntityNotFoundException("Depot not found"));
+                .orElseThrow(() -> new EntityNotFoundException(DEPOT_NOT_FOUND));
 
         Car car = carService.getCarById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Car not found"));
+                .orElseThrow(() -> new EntityNotFoundException(CAR_NOT_FOUND));
 
         carMapper.updateFromDTO(inCarDTO, car);
         car.setDepot(depot);
@@ -126,20 +130,20 @@ public class DepotCarsController {
             throws EntityNotFoundException, DatabaseException {
         Optional<Depot> depotOptional = depotService.getDepotById(depotId);
         if (!depotOptional.isPresent()) {
-            throw new EntityNotFoundException("Depot not found");
+            throw new EntityNotFoundException(DEPOT_NOT_FOUND);
         }
 
         if (!validateDepotId(depotId)) {
-            throw new SecurityException("Access denied");
+            throw new SecurityException(ACCESS_DENIED);
         }
 
         Optional<Car> car = carService.getCarById(id);
         if (!car.isPresent()) {
-            throw new EntityNotFoundException("Car not found");
+            throw new EntityNotFoundException(CAR_NOT_FOUND);
         }
 
         if (!car.get().getDepot().getId().equals(depotId)) {
-            throw new EntityNotFoundException("Car does not belong to depot");
+            throw new EntityNotFoundException(CAR_NOT_FOUND);
         }
 
         carService.deleteCar(id);

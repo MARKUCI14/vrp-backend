@@ -26,6 +26,9 @@ import java.util.stream.Collectors;
 @CrossOrigin(origins = "http://localhost:5173")
 @RequestMapping("/api/depots")
 public class DepotController {
+    private static final String DEPOT_NOT_FOUND = "Depot not found";
+    private static final String ACCESS_DENIED = "Access denied";
+
     @Autowired
     private final DepotService depotService;
 
@@ -57,10 +60,10 @@ public class DepotController {
     public OutDepotDTO getDepot(@PathVariable Long id) throws EntityNotFoundException, DatabaseException {
         User user = getCurrentUser();
         Depot depot = depotService.getDepotById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Depot not found"));
+                .orElseThrow(() -> new EntityNotFoundException(DEPOT_NOT_FOUND));
 
         if (!depot.getUser().getId().equals(user.getId())) {
-            throw new SecurityException("Access denied");
+            throw new SecurityException(ACCESS_DENIED);
         }
 
         return depotMapper.toOutDepotDTO(depot);
@@ -83,15 +86,15 @@ public class DepotController {
     @PutMapping("/{id}")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<OutDepotDTO> updateDepot(@PathVariable Long id,
-                                                   @Valid @RequestBody InDepotDTO inDepot)
+            @Valid @RequestBody InDepotDTO inDepot)
             throws EntityNotFoundException, DatabaseException {
         User user = getCurrentUser();
 
         Depot depot = depotService.getDepotById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Depot not found"));
+                .orElseThrow(() -> new EntityNotFoundException(DEPOT_NOT_FOUND));
 
         if (!depot.getUser().getId().equals(user.getId())) {
-            throw new ResponseStatusException(HttpStatus.FORBIDDEN, "Access denied");
+            throw new ResponseStatusException(HttpStatus.FORBIDDEN, ACCESS_DENIED);
         }
 
         depotMapper.updateFromDTO(inDepot, depot);
@@ -106,10 +109,10 @@ public class DepotController {
         User user = getCurrentUser();
 
         Depot depot = depotService.getDepotById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Depot not found"));
+                .orElseThrow(() -> new EntityNotFoundException(DEPOT_NOT_FOUND));
 
         if (!depot.getUser().getId().equals(user.getId())) {
-            throw new SecurityException("Access denied");
+            throw new SecurityException(ACCESS_DENIED);
         }
 
         depotService.deleteDepot(id);
