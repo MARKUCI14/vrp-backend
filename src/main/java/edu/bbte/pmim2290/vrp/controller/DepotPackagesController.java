@@ -86,7 +86,7 @@ public class DepotPackagesController {
         }
 
         Package pkg = packageService.getPackageById(id)
-                .orElseThrow(() -> new EntityNotFoundException("Package not found"));
+                .orElseThrow(() -> new EntityNotFoundException(PACKAGE_NOT_FOUND));
 
         if (!pkg.getDepot().getId().equals(depotId)) {
             throw new SecurityException(ACCESS_DENIED);

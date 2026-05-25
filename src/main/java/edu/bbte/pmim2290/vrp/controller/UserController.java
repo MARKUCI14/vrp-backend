@@ -37,7 +37,7 @@ public class UserController {
     }
 
     @GetMapping
-    public OutUserDTO getUser() throws EntityNotFoundException, DatabaseException {
+    public OutUserDTO getUser() {
         User authUser = getCurrentUser();
         return userMapper.toOutUserDTO(authUser);
     }
